@@ -13,13 +13,13 @@ namespace OOP_course_restaraunt
 {
     public partial class FilterForm : Form
     {
-        MenuRepository menuRepository;
+        MenuPresenter menuPresenter;
         public event Action<List<DishDTO>>? FilterCompleted;
         public event Action? FilterStopped;
         static readonly string[] comboBox1Values = ["Название", "Описание", "Ингредиенты", "Цена приготовления", "Цена продажи"];
-        public FilterForm(MenuRepository repo)
+        public FilterForm(MenuPresenter repo)
         {
-            menuRepository = repo;
+            menuPresenter = repo;
             InitializeComponent();
         }
 
@@ -36,7 +36,7 @@ namespace OOP_course_restaraunt
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var menu = menuRepository.GetAll();
+            var menu = menuPresenter.GetAll();
             List<DishDTO> filteredMenu = comboBox1.SelectedIndex switch
             {
                 0 => menu.FindAll(d => (d._name ?? "").Contains(textBox1.Text)),

@@ -6,12 +6,12 @@ using System.Text;
 
 namespace OOP_course_restaraunt.Repository
 {
-    public class MenuRepository
+    public class MenuPresenter
     {
         const string CONNECTION_STRING = "Host=localhost;Database=postgres;Username=postgres;Password=mihandr";
         public List<DishDTO>? sortedMenu = null;
 
-        public MenuRepository()
+        public MenuPresenter()
         {
             
         }
@@ -51,7 +51,6 @@ namespace OOP_course_restaraunt.Repository
             }
             return result;
         }
-
         public void RemoveById(int id)
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);

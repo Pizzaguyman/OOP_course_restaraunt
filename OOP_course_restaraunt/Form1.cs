@@ -8,7 +8,7 @@ namespace OOP_course_restaraunt
 {
     public partial class Form1 : Form
     {
-        MenuRepository menuRepository = new();
+        MenuPresenter menuPresenter = new();
         SearchForm searchForm;
         FilterForm filterForm;
         bool IsFiltered
@@ -43,9 +43,9 @@ namespace OOP_course_restaraunt
         int editedId = 0;
         public Form1()
         {
-            searchForm = new(menuRepository);
+            searchForm = new(menuPresenter);
             searchForm.SearchCompleted += FocusIndex;
-            filterForm = new(menuRepository);
+            filterForm = new(menuPresenter);
             filterForm.FilterCompleted += GridUpdateFilter;
             filterForm.FilterStopped += GridUpdate;
             InitializeComponent();
@@ -90,7 +90,7 @@ namespace OOP_course_restaraunt
             {
                 var ingredients = inputIngr.Text.Split(";").ToList();
                 for (int i = 0; i < ingredients.Count; i++) ingredients[i] = ingredients[i].Trim();
-                menuRepository.Add(new DishDTO(
+                menuPresenter.Add(new DishDTO(
                     inputName.Text,
                     inputDesc.Text,
                     ingredients,
@@ -107,7 +107,7 @@ namespace OOP_course_restaraunt
         }
         private void GridUpdate()
         {
-            var menu = menuRepository.GetAll();
+            var menu = menuPresenter.GetAll();
             dataGridView1.RowCount = menu.Count;
             for (int i = 0; i < menu.Count; i++)
             {
@@ -123,7 +123,7 @@ namespace OOP_course_restaraunt
 
         private void GridUpdateSorted()
         {
-            var menu = menuRepository.sortedMenu;
+            var menu = menuPresenter.sortedMenu;
             dataGridView1.RowCount = menu?.Count??0;
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
@@ -138,7 +138,7 @@ namespace OOP_course_restaraunt
 
         private void button4_Click(object sender, EventArgs e)
         {
-            menuRepository.Clear();
+            menuPresenter.Clear();
             GridUpdate();
         }
 
@@ -157,7 +157,7 @@ namespace OOP_course_restaraunt
             }
             if (e.ColumnIndex == 7)
             {
-                menuRepository.RemoveById((int)(dataGridView1.Rows[e.RowIndex].Cells[0].Value ?? 0));
+                menuPresenter.RemoveById((int)(dataGridView1.Rows[e.RowIndex].Cells[0].Value ?? 0));
                 GridUpdate();
             }
         }
@@ -168,7 +168,7 @@ namespace OOP_course_restaraunt
             {
                 var ingredients = inputIngr.Text.Split(";").ToList();
                 for (int i = 0; i < ingredients.Count; i++) ingredients[i] = ingredients[i].Trim();
-                menuRepository.ChangeById(editedId, new DishDTO(
+                menuPresenter.ChangeById(editedId, new DishDTO(
                     inputName.Text,
                     inputDesc.Text,
                     ingredients,
@@ -213,13 +213,13 @@ namespace OOP_course_restaraunt
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string savePath = saveFileDialog1.FileName;
-                menuRepository.SaveToCsv(savePath);
+                menuPresenter.SaveToCsv(savePath);
             }
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            menuRepository.Sort(comboBox1.SelectedIndex switch
+            menuPresenter.Sort(comboBox1.SelectedIndex switch
             {
                 0 => "name",
                 1 => "description",
@@ -233,7 +233,7 @@ namespace OOP_course_restaraunt
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            menuRepository.SortDesc(comboBox1.SelectedIndex switch
+            menuPresenter.SortDesc(comboBox1.SelectedIndex switch
             {
                 0 => "name",
                 1 => "description",

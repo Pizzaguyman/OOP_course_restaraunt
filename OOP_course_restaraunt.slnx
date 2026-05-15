@@ -1,4 +1,6 @@
 <Solution>
   <Project Path="OOP_course_restaraunt/OOP_course_restaraunt.csproj" />
-  <Project Path="RestarauntDBSetup/RestarauntDBSetup.vdproj" Type="Installer" />
+  <Project Path="RestarauntDBSetup/RestarauntDBSetup.vdproj" Type="Installer">
+    <Build />
+  </Project>
 </Solution>

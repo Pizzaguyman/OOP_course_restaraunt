@@ -54,12 +54,12 @@ namespace OOP_course_restaraunt
         private void FocusIndex(int id)
         {
             Focus();
-            for(int i = 0; i < dataGridView1.RowCount; i++)
+            for (int i = 0; i < dataGridView1.RowCount; i++)
             {
                 dataGridView1.Rows[i].Selected = false;
-                if ((int)(dataGridView1.Rows[i].Cells[0].Value??0) == id) dataGridView1.Rows[id].Selected = true;
+                if ((int)(dataGridView1.Rows[i].Cells[0].Value ?? 0) == id) dataGridView1.Rows[id].Selected = true;
             }
-            
+
         }
 
         private void GridUpdateFilter(List<DishDTO> filteredMenu)
@@ -79,9 +79,25 @@ namespace OOP_course_restaraunt
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            GridUpdate();
-            UsingMarkup = false;
-            IsEditing = false;
+            try
+            {
+                MessageBox.Show("Курсовая работа по ООП. Медведев М. 24ВП1. База данных \"Меню\".",
+                "Введение в приложение",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+                GridUpdate();
+                UsingMarkup = false;
+                IsEditing = false;
+            }
+            catch (Npgsql.NpgsqlException ex)
+            {
+                MessageBox.Show("Не удалось соединиться с базой данных\n" + ex.Message,
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
+                Close();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -124,7 +140,7 @@ namespace OOP_course_restaraunt
         private void GridUpdateSorted()
         {
             var menu = menuPresenter.sortedMenu;
-            dataGridView1.RowCount = menu?.Count??0;
+            dataGridView1.RowCount = menu?.Count ?? 0;
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
                 dataGridView1.Rows[i].Cells[0].Value = menu?[i]._id;
@@ -244,6 +260,10 @@ namespace OOP_course_restaraunt
             });
             GridUpdateSorted();
         }
-        
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

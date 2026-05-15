@@ -154,6 +154,7 @@
             // inputName
             // 
             inputName.Location = new Point(15, 27);
+            inputName.MaxLength = 100;
             inputName.Name = "inputName";
             inputName.Size = new Size(335, 23);
             inputName.TabIndex = 2;
@@ -161,6 +162,7 @@
             // inputDesc
             // 
             inputDesc.Location = new Point(16, 86);
+            inputDesc.MaxLength = 2500;
             inputDesc.Multiline = true;
             inputDesc.Name = "inputDesc";
             inputDesc.Size = new Size(334, 127);
@@ -307,9 +309,10 @@
             label3.AutoSize = true;
             label3.Location = new Point(15, 227);
             label3.Name = "label3";
-            label3.Size = new Size(81, 15);
+            label3.Size = new Size(184, 15);
             label3.TabIndex = 5;
-            label3.Text = "Ингредиенты";
+            label3.Text = "Ингредиенты (введите через \";\")";
+            label3.Click += label3_Click;
             // 
             // button2
             // 

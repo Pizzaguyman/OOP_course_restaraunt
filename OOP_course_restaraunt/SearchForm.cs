@@ -11,14 +11,14 @@ namespace OOP_course_restaraunt
 {
     public partial class SearchForm : Form
     {
-        MenuRepository menuRepository;
+        MenuPresenter menuPresenter;
         public event Action<int>? SearchCompleted;
         string previousSearch = "";
         int previousFindIndex = 0;
         static readonly string[] comboBox1Values = ["ID", "Название", "Описание", "Ингредиенты", "Цена приготовления", "Цена продажи"];
-        public SearchForm(MenuRepository repo)
+        public SearchForm(MenuPresenter repo)
         {
-            menuRepository = repo;
+            menuPresenter = repo;
             InitializeComponent();
         }
 
@@ -30,7 +30,7 @@ namespace OOP_course_restaraunt
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var menu = menuRepository.GetAll();
+            var menu = menuPresenter.GetAll();
             if (previousSearch != textBox1.Text) previousFindIndex = 0;
             previousFindIndex = comboBox1.SelectedIndex switch
             {

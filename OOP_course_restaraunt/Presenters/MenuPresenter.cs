@@ -6,15 +6,24 @@ using System.Text;
 
 namespace OOP_course_restaraunt.Repository
 {
+    /// <summary>
+    /// Класс, сообщающий приложение с базой данных
+    /// </summary>
     public class MenuPresenter
     {
         const string CONNECTION_STRING = "Host=localhost;Database=postgres;Username=postgres;Password=mihandr";
         public List<DishDTO>? sortedMenu = null;
 
-        public MenuPresenter()
-        {
-            
-        }
+        /// <summary>
+        /// Создаёт объект
+        /// </summary>
+        public MenuPresenter() { }
+
+        /// <summary>
+        /// Добавляет новое блюдо
+        /// </summary>
+        /// <param name="dto">Блюдо</param>
+        /// <exception cref="ArgumentException">Исключение при повторении ингредиентов</exception>
         public void Add(DishDTO dto)
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);
@@ -35,6 +44,11 @@ namespace OOP_course_restaraunt.Repository
             cmd.Parameters.Add("sellprice", NpgsqlDbType.Double).Value = dto._sell_price;
             cmd.ExecuteNonQuery();
         }
+
+        /// <summary>
+        /// Получает все блюда
+        /// </summary>
+        /// <returns>Блюда</returns>
         public List<DishDTO> GetAll()
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);
@@ -51,6 +65,11 @@ namespace OOP_course_restaraunt.Repository
             }
             return result;
         }
+
+        /// <summary>
+        /// Удаляет блюдо по идентификатору
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
         public void RemoveById(int id)
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);
@@ -60,6 +79,10 @@ namespace OOP_course_restaraunt.Repository
             cmd.Parameters.AddWithValue("id", id);
             cmd.ExecuteNonQuery();
         }
+
+        /// <summary>
+        /// Очищает базу данных
+        /// </summary>
         public void Clear()
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);
@@ -68,6 +91,13 @@ namespace OOP_course_restaraunt.Repository
                 "SELECT setval(pg_get_serial_sequence('menu', 'id'), 1, false);", con);
             cmd.ExecuteNonQuery();
         }
+
+        /// <summary>
+        /// Изменяет блюдо по идентификатору
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="dto">Новые данные блюда</param>
+        /// <exception cref="ArgumentException">Исключение при повторении ингредиентов</exception>
         public void ChangeById(int id, DishDTO dto)
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);
@@ -89,6 +119,11 @@ namespace OOP_course_restaraunt.Repository
             cmd.Parameters.Add("sell", NpgsqlDbType.Double).Value = dto._sell_price;
             cmd.ExecuteNonQuery();
         }
+
+        /// <summary>
+        /// Сохраняет базу данных в виде файла
+        /// </summary>
+        /// <param name="filePath">Путь к файлу</param>
         public void SaveToCsv(string filePath)
         {
             NpgsqlConnection con = new NpgsqlConnection(CONNECTION_STRING);
@@ -104,6 +139,11 @@ namespace OOP_course_restaraunt.Repository
                 }
             }
         }
+
+        /// <summary>
+        /// Сортирует базу данных по возастанию
+        /// </summary>
+        /// <param name="field">Поле-аргумент для сортировки</param>
         public void Sort(string field)
         {
             List<DishDTO> result = new();
@@ -120,6 +160,11 @@ namespace OOP_course_restaraunt.Repository
             }
             sortedMenu = result;
         }
+
+        /// <summary>
+        /// Сортирует базу данных по убыванию
+        /// </summary>
+        /// <param name="field">Поле-аргумент для сортировки</param>
         public void SortDesc(string field)
         {
             List<DishDTO> result = new();

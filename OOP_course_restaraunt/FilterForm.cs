@@ -11,18 +11,30 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OOP_course_restaraunt
 {
+    /// <summary>
+    /// Форма для фильтрации
+    /// </summary>
     public partial class FilterForm : Form
     {
         MenuPresenter menuPresenter;
         public event Action<List<DishDTO>>? FilterCompleted;
         public event Action? FilterStopped;
         static readonly string[] comboBox1Values = ["Название", "Описание", "Ингредиенты", "Цена приготовления", "Цена продажи"];
+        /// <summary>
+        /// Создаёт форму для фильтрации
+        /// </summary>
+        /// <param name="repo">Объект сообщения с базой данных</param>
         public FilterForm(MenuPresenter repo)
         {
             menuPresenter = repo;
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Инициализирует элементы формы
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void FilterForm_Load(object sender, EventArgs e)
         {
             comboBox1.DataSource = comboBox1Values;
@@ -34,6 +46,11 @@ namespace OOP_course_restaraunt
 
         }
 
+        /// <summary>
+        /// Фильтрует блюда
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button1_Click(object sender, EventArgs e)
         {
             var menu = menuPresenter.GetAll();
@@ -49,6 +66,11 @@ namespace OOP_course_restaraunt
             FilterCompleted?.Invoke(filteredMenu);
         }
 
+        /// <summary>
+        /// СБрасывает фильтрацию блюд
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button2_Click(object sender, EventArgs e)
         {
             comboBox1.Text = "-";

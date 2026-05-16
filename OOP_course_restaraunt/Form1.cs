@@ -6,6 +6,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OOP_course_restaraunt
 {
+    /// <summary>
+    /// Главная форма приложения
+    /// </summary>
     public partial class Form1 : Form
     {
         MenuPresenter menuPresenter = new();
@@ -41,27 +44,36 @@ namespace OOP_course_restaraunt
             }
         } = false;
         int editedId = 0;
+
+        /// <summary>
+        /// Создаёт форму
+        /// </summary>
         public Form1()
         {
             searchForm = new(menuPresenter);
-            searchForm.SearchCompleted += FocusIndex;
             filterForm = new(menuPresenter);
-            filterForm.FilterCompleted += GridUpdateFilter;
-            filterForm.FilterStopped += GridUpdate;
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Выбирает блюдо с определённым идентификатором
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
         private void FocusIndex(int id)
         {
             Focus();
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
                 dataGridView1.Rows[i].Selected = false;
-                if ((int)(dataGridView1.Rows[i].Cells[0].Value ?? 0) == id) dataGridView1.Rows[id].Selected = true;
+                if ((int)(dataGridView1.Rows[i].Cells[0].Value ?? 0) == id) dataGridView1.Rows[i].Selected = true;
             }
 
         }
 
+        /// <summary>
+        /// Обновляет таблицу отфильтрованного меню
+        /// </summary>
+        /// <param name="filteredMenu">Отфильтрованное меню</param>
         private void GridUpdateFilter(List<DishDTO> filteredMenu)
         {
             dataGridView1.RowCount = filteredMenu.Count;
@@ -77,6 +89,11 @@ namespace OOP_course_restaraunt
             IsFiltered = true;
         }
 
+        /// <summary>
+        /// Инициализирует элементы формы
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void Form1_Load(object sender, EventArgs e)
         {
             try
@@ -100,6 +117,11 @@ namespace OOP_course_restaraunt
             }
         }
 
+        /// <summary>
+        /// Добавление нового блюда по нажатию кнопки
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -115,12 +137,16 @@ namespace OOP_course_restaraunt
                     (double)inputMarkup.Value
                     ));
                 GridUpdate();
+                IsFiltered = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
+        /// <summary>
+        /// Обновляет таблицу блюд
+        /// </summary>
         private void GridUpdate()
         {
             var menu = menuPresenter.GetAll();
@@ -137,6 +163,9 @@ namespace OOP_course_restaraunt
             IsFiltered = false;
         }
 
+        /// <summary>
+        /// Обновляет таблицу блюд, отсортированную определённым способом
+        /// </summary>
         private void GridUpdateSorted()
         {
             var menu = menuPresenter.sortedMenu;
@@ -152,12 +181,24 @@ namespace OOP_course_restaraunt
             }
         }
 
+        /// <summary>
+        /// Очищает базу данных
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button4_Click(object sender, EventArgs e)
         {
             menuPresenter.Clear();
             GridUpdate();
+            IsFiltered = false;
+            IsEditing = false;
         }
 
+        /// <summary>
+        /// Изменяет или удаляет блюда в зависимости от нажатой кнопки в таблице
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 6)
@@ -169,15 +210,20 @@ namespace OOP_course_restaraunt
                 inputIngr.Text = ((string)(dataGridView1.Rows[e.RowIndex].Cells[3].Value ?? "")).Replace(";", ";");
                 inputProd.Value = Convert.ToDecimal(dataGridView1.Rows[e.RowIndex].Cells[4].Value ?? 0);
                 inputSell.Value = Convert.ToDecimal(dataGridView1.Rows[e.RowIndex].Cells[5].Value ?? 0);
-                GridUpdate();
             }
             if (e.ColumnIndex == 7)
             {
                 menuPresenter.RemoveById((int)(dataGridView1.Rows[e.RowIndex].Cells[0].Value ?? 0));
                 GridUpdate();
+                IsFiltered = false;
             }
         }
 
+        /// <summary>
+        /// Подтверждает редактирование блюда
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button3_Click(object sender, EventArgs e)
         {
             try
@@ -194,6 +240,7 @@ namespace OOP_course_restaraunt
                 ));
                 IsEditing = false;
                 GridUpdate();
+                IsFiltered = false;
             }
             catch (Exception ex)
             {
@@ -201,24 +248,52 @@ namespace OOP_course_restaraunt
             }
         }
 
+        /// <summary>
+        /// Открывает форму поиска
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button2_Click(object sender, EventArgs e)
         {
+            searchForm = new(menuPresenter);
+            searchForm.SearchCompleted += FocusIndex;
             searchForm.Show();
         }
+
+        /// <summary>
+        /// Изменяет режим использования наценки
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             UsingMarkup = checkBox1.Checked;
         }
+        /// <summary>
+        /// Отменяет редактирование
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button6_Click(object sender, EventArgs e)
         {
             IsEditing = false;
         }
 
+        /// <summary>
+        /// Закрывает программу
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button8_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Сохраняет базу данных в виде файла
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button5_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -233,6 +308,11 @@ namespace OOP_course_restaraunt
             }
         }
 
+        /// <summary>
+        /// Сортирует блюда по возрастанию
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button1_Click_1(object sender, EventArgs e)
         {
             menuPresenter.Sort(comboBox1.SelectedIndex switch
@@ -247,6 +327,11 @@ namespace OOP_course_restaraunt
             GridUpdateSorted();
         }
 
+        /// <summary>
+        /// Сортирует блюда по убыванию
+        /// </summary>
+        /// <param name="sender">Отправитель</param>
+        /// <param name="e">Параметры события</param>
         private void button3_Click_1(object sender, EventArgs e)
         {
             menuPresenter.SortDesc(comboBox1.SelectedIndex switch
@@ -264,6 +349,14 @@ namespace OOP_course_restaraunt
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            filterForm = new(menuPresenter);
+            filterForm.FilterCompleted += GridUpdateFilter;
+            filterForm.FilterStopped += GridUpdate;
+            filterForm.Show();
         }
     }
 }

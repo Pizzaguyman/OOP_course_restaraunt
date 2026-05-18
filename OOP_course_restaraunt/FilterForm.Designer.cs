@@ -79,7 +79,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Name = "FilterForm";
-            Text = "FilterForm";
+            Text = "Фильтрация";
             Load += FilterForm_Load;
             ResumeLayout(false);
             PerformLayout();

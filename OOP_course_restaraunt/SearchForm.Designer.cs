@@ -79,7 +79,7 @@
             Controls.Add(comboBox1);
             Controls.Add(label1);
             Name = "SearchForm";
-            Text = "SearchForm";
+            Text = "Поиск";
             Load += SearchForm_Load;
             ResumeLayout(false);
             PerformLayout();
